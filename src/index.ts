@@ -1,14 +1,15 @@
 import { config } from "dotenv"
 import express from "express"
+import indexRoutes from "./routes/index.route"
+
 // loading environment variables.
 config()
 
 // intializing the express instance
 const app = express()
 
-app.get("/", (_, res) => {
-  res.json({ message: "test" })
-})
+// implementing api versioning
+app.use("/api/v1", indexRoutes)
 
 const port = process.env.PORT ?? 3000
 
