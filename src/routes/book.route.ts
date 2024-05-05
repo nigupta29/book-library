@@ -1,11 +1,8 @@
 import { Router } from "express"
+import { createBook, getAllBooks } from "../controllers/book.controller"
 
 const route = Router()
 
-route.get("/", (_, res) => {
-  res.json({ message: "test" })
-})
-
-route.post("/", )
+route.route("/").get(getAllBooks).post(createBook)
 
 export default route

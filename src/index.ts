@@ -8,6 +8,10 @@ config()
 // intializing the express instance
 const app = express()
 
+// --- MIDDLEWARES ---
+app.use(express.json())
+app.use(express.urlencoded({ extended: true }))
+
 // implementing api versioning
 app.use("/api/v1", indexRoutes)
 
