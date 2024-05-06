@@ -1,5 +1,7 @@
 # Book Library
 
+The Postman Collection - [link](https://www.postman.com/jerry-codes/workspace/portfolio-projects/collection/13047138-98b63ec8-618c-4ad0-bb50-488b4872cc7c?action=share&creator=13047138&active-environment=13047138-a2c1cc84-7061-498c-8d29-014627d08afd)
+
 #### Overview
 
 1. Implemented all the requested routes i.e. GET, POST, PATCH, PUT and Delete
