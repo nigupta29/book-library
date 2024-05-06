@@ -2,7 +2,7 @@ import { Request, Response } from "express"
 
 const bookDB: string[] = []
 
-const checkIfBookPresent = (book: string) =>
+const getIndexIfBookPresent = (book: string) =>
   bookDB.findIndex((item) => item === book)
 
 export const createBook = (req: Request, res: Response) => {
@@ -10,7 +10,7 @@ export const createBook = (req: Request, res: Response) => {
     // TODO: string validation
     const newBook = req.body.book.trim()
 
-    if (checkIfBookPresent(newBook) !== -1) {
+    if (getIndexIfBookPresent(newBook) !== -1) {
       res.status(400)
       throw new Error(`Book: '${newBook}' is already present in the library`)
     }
@@ -44,9 +44,9 @@ export const deleteBook = (req: Request, res: Response) => {
     // TODO: string validation
     const book = req.body.book.trim()
 
-    const bookIndex = checkIfBookPresent(book)
+    const bookIndex = getIndexIfBookPresent(book)
 
-    if (checkIfBookPresent(book) === -1) {
+    if (getIndexIfBookPresent(book) === -1) {
       res.status(404)
       throw new Error(`Book: '${book}' doesn't exist in the library`)
     }
@@ -71,9 +71,9 @@ export const updateBook = (req: Request, res: Response) => {
     const originalBook = req.body.original_book.trim()
     const newBook = req.body.new_book.trim()
 
-    const bookIndex = checkIfBookPresent(originalBook)
+    const bookIndex = getIndexIfBookPresent(originalBook)
 
-    if (checkIfBookPresent(originalBook) === -1) {
+    if (getIndexIfBookPresent(originalBook) === -1) {
       res.status(404)
       throw new Error(`Book: '${originalBook}' doesn't exist in the library`)
     }
