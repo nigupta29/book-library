@@ -15,7 +15,6 @@ describe(`POST ${BOOKS_API_ROUTE}}`, () => {
     expect(response.body.message).toContain(
       `Book: '${newBook}' successfully added to the library`
     )
-    expect(response.body.data).toContain(newBook)
   })
 
   it("should return 400 if the book already exists", async () => {

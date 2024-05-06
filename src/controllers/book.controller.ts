@@ -1,4 +1,4 @@
-import { Request, Response } from "express"
+import { NextFunction, Request, Response } from "express"
 import { getBookList } from "../utils/helper"
 import {
   createBookSchema,
@@ -11,7 +11,7 @@ const bookDB: string[] = []
 const getIndexIfBookPresent = (book: string) =>
   bookDB.findIndex((item) => item === book)
 
-export const createBook = (req: Request, res: Response) => {
+export const createBook = (req: Request, res: Response, next: NextFunction) => {
   try {
     const { book: newBook } = createBookSchema.parse(req.body)
 
@@ -24,37 +24,28 @@ export const createBook = (req: Request, res: Response) => {
 
     res.status(201).json({
       status: "success",
-      message: `Book: '${newBook}' successfully added to the library`,
-      data: bookDB
+      message: `Book: '${newBook}' successfully added to the library`
     })
   } catch (error) {
-    res.json({
-      status: "error",
-      message:
-        error instanceof Error
-          ? error.message
-          : "Internal Server Error! Something went wrong!"
-    })
+    next(error)
   }
 }
 
-export const getAllBooks = (req: Request, res: Response) => {
+export const getAllBooks = (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   try {
     getBookList(bookDB, 0, ",", (bookList: string) => {
       res.status(200).json({ status: "success", data: { books: bookList } })
     })
   } catch (error) {
-    res.json({
-      status: "error",
-      message:
-        error instanceof Error
-          ? error.message
-          : "Internal Server Error! Something went wrong!"
-    })
+    next(error)
   }
 }
 
-export const deleteBook = (req: Request, res: Response) => {
+export const deleteBook = (req: Request, res: Response, next: NextFunction) => {
   try {
     const { book } = deleteBookSchema.parse(req.body)
 
@@ -69,17 +60,11 @@ export const deleteBook = (req: Request, res: Response) => {
 
     res.status(204).json({})
   } catch (error) {
-    res.json({
-      status: "error",
-      message:
-        error instanceof Error
-          ? error.message
-          : "Internal Server Error! Something went wrong!"
-    })
+    next(error)
   }
 }
 
-export const updateBook = (req: Request, res: Response) => {
+export const updateBook = (req: Request, res: Response, next: NextFunction) => {
   try {
     const { original_book: originalBook, new_book: newBook } =
       updateBookSchema.parse(req.body)
@@ -98,17 +83,11 @@ export const updateBook = (req: Request, res: Response) => {
       message: `Book: '${originalBook}' successfully updated to '${newBook}' in the library`
     })
   } catch (error) {
-    res.json({
-      status: "error",
-      message:
-        error instanceof Error
-          ? error.message
-          : "Internal Server Error! Something went wrong!"
-    })
+    next(error)
   }
 }
 
-export const saveBooks = (req: Request, res: Response) => {
+export const saveBooks = (req: Request, res: Response, next: NextFunction) => {
   try {
     const books = bookDB.map((item) => ({
       [item]: Math.random() * item.length
@@ -119,12 +98,6 @@ export const saveBooks = (req: Request, res: Response) => {
       data: { books }
     })
   } catch (error) {
-    res.json({
-      status: "error",
-      message:
-        error instanceof Error
-          ? error.message
-          : "Internal Server Error! Something went wrong!"
-    })
+    next(error)
   }
 }

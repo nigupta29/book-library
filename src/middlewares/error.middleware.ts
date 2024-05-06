@@ -22,7 +22,7 @@ export const errorHandler = (
   next: NextFunction
 ): void => {
   let statusCode: number = res.statusCode === 200 ? 500 : res.statusCode
-  let message: string = "Internal Server Error!"
+  let message: string = err.message
 
   if (err instanceof ZodError) {
     statusCode = 400
