@@ -64,3 +64,30 @@ export const deleteBook = (req: Request, res: Response) => {
     })
   }
 }
+
+export const updateBook = (req: Request, res: Response) => {
+  try {
+    // TODO: string validation
+    const originalBook = req.body.original_book.trim()
+    const newBook = req.body.new_book.trim()
+
+    const bookIndex = checkIfBookPresent(originalBook)
+
+    if (checkIfBookPresent(originalBook) === -1) {
+      res.status(404)
+      throw new Error(`Book: '${originalBook}' doesn't exist in the library`)
+    }
+
+    bookDB[bookIndex] = newBook
+
+    res.status(201).json({
+      status: "success",
+      message: `Book: '${originalBook}' successfully updated to '${newBook}' in the library`
+    })
+  } catch (error) {
+    res.json({
+      status: "error",
+      message: error instanceof Error ? error.message : "Something went wrong"
+    })
+  }
+}

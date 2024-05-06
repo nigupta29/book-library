@@ -2,11 +2,17 @@ import { Router } from "express"
 import {
   createBook,
   deleteBook,
-  getAllBooks
+  getAllBooks,
+  updateBook
 } from "../controllers/book.controller"
 
 const route = Router()
 
-route.route("/").get(getAllBooks).post(createBook).delete(deleteBook)
+route
+  .route("/")
+  .get(getAllBooks)
+  .post(createBook)
+  .patch(updateBook)
+  .delete(deleteBook)
 
 export default route
