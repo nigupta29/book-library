@@ -1,9 +1,15 @@
 import request from "supertest"
 import app from "../src/app"
 import { BOOKS_SEPERATOR } from "../src/utils/constants"
-import { BOOKS_API_ROUTE, testBookData } from "./utils/constants"
+import { BOOKS_API_ROUTE } from "./utils/constants"
 
-
+const testBookData = [
+  "1984",
+  "A Christmas Carol",
+  "Moby Dick",
+  "The Hitchhiker’s Guide to the Galaxy”",
+  "The Lord of the Rings"
+]
 
 describe(`GET ${BOOKS_API_ROUTE}}`, () => {
   it(`should give all the books name in string with ${BOOKS_SEPERATOR} seperator`, async () => {

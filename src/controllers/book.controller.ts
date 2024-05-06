@@ -1,13 +1,19 @@
 import { NextFunction, Request, Response } from "express"
 import { BOOKS_SEPERATOR } from "../utils/constants"
-import { getBookList } from "../utils/helper"
+import { getBookList, saveItemOnDatabase } from "../utils/helper"
 import {
   createBookSchema,
   deleteBookSchema,
   updateBookSchema
 } from "../utils/schema"
 
-const bookDB: string[] = []
+const bookDB: string[] = [
+  "1984",
+  "A Christmas Carol",
+  "Moby Dick",
+  "The Hitchhiker’s Guide to the Galaxy”",
+  "The Lord of the Rings"
+]
 
 const getIndexIfBookPresent = (book: string) =>
   bookDB.findIndex((item) => item.toLowerCase() === book.toLowerCase())
@@ -125,14 +131,35 @@ export const updateBook = (req: Request, res: Response, next: NextFunction) => {
  */
 export const saveBooks = (req: Request, res: Response, next: NextFunction) => {
   try {
-    const books = bookDB.map((item) => ({
-      [item]: Math.random() * item.length
-    }))
+    const startTime = Date.now()
+    const responseObj: Record<string, number> = {}
 
-    res.status(200).json({
-      status: "success",
-      data: { books }
+    let completedCount = 0
+
+    function saveBook(bookName: string) {
+      saveItemOnDatabase(bookName, () => {
+        const callbackTime = Date.now() - startTime
+        responseObj[bookName] = callbackTime
+
+        if (++completedCount === bookDB.length) {
+          res.status(200).json({
+            status: "success",
+            data: { books: responseObj }
+          })
+        }
+      })
+    }
+
+    bookDB.forEach((bookName) => {
+      saveBook(bookName)
     })
+
+    if (bookDB.length === 0) {
+      res.status(200).json({
+        status: "success",
+        data: { books: {} }
+      })
+    }
   } catch (error) {
     next(error)
   }

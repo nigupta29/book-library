@@ -17,3 +17,12 @@ export function getBookList(
     getBookList(list, index + 1, separator, callback, result)
   }, 100)
 }
+
+export function saveItemOnDatabase(name: string, callback: () => void) {
+  setTimeout(
+    () => {
+      callback()
+    },
+    Math.random() * name.length * 10
+  )
+}
