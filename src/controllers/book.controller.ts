@@ -1,22 +1,19 @@
 import { Request, Response } from "express"
 import { getBookList } from "../utils/helper"
+import {
+  createBookSchema,
+  deleteBookSchema,
+  updateBookSchema
+} from "../utils/schema"
 
-// added for testing api
-const bookDB: string[] = [
-  "1984",
-  "A Christmas Carol",
-  "Moby Dick",
-  "The Hitchhiker’s Guide to the Galaxy",
-  "The Lord of the Rings"
-]
+const bookDB: string[] = []
 
 const getIndexIfBookPresent = (book: string) =>
   bookDB.findIndex((item) => item === book)
 
 export const createBook = (req: Request, res: Response) => {
   try {
-    // TODO: string validation
-    const newBook = req.body.book.trim()
+    const { book: newBook } = createBookSchema.parse(req.body)
 
     if (getIndexIfBookPresent(newBook) !== -1) {
       res.status(400)
@@ -59,8 +56,7 @@ export const getAllBooks = (req: Request, res: Response) => {
 
 export const deleteBook = (req: Request, res: Response) => {
   try {
-    // TODO: string validation
-    const book = req.body.book.trim()
+    const { book } = deleteBookSchema.parse(req.body)
 
     const bookIndex = getIndexIfBookPresent(book)
 
@@ -85,9 +81,8 @@ export const deleteBook = (req: Request, res: Response) => {
 
 export const updateBook = (req: Request, res: Response) => {
   try {
-    // TODO: string validation
-    const originalBook = req.body.original_book.trim()
-    const newBook = req.body.new_book.trim()
+    const { original_book: originalBook, new_book: newBook } =
+      updateBookSchema.parse(req.body)
 
     const bookIndex = getIndexIfBookPresent(originalBook)
 
