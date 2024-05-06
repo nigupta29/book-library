@@ -7,13 +7,7 @@ import {
   updateBookSchema
 } from "../utils/schema"
 
-const bookDB: string[] = [
-  "1984",
-  "A Christmas Carol",
-  "Moby Dick",
-  "The Hitchhiker’s Guide to the Galaxy”",
-  "The Lord of the Rings"
-]
+const bookDB: string[] = []
 
 const getIndexIfBookPresent = (book: string) =>
   bookDB.findIndex((item) => item.toLowerCase() === book.toLowerCase())
