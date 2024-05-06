@@ -1,4 +1,5 @@
 import { NextFunction, Request, Response } from "express"
+import { BOOKS_SEPERATOR } from "../utils/constants"
 import { getBookList } from "../utils/helper"
 import {
   createBookSchema,
@@ -47,7 +48,7 @@ export const getAllBooks = (
   next: NextFunction
 ) => {
   try {
-    getBookList(bookDB, 0, ",", (bookList: string) => {
+    getBookList(bookDB, 0, BOOKS_SEPERATOR, (bookList: string) => {
       res.status(200).json({ status: "success", data: { books: bookList } })
     })
   } catch (error) {
