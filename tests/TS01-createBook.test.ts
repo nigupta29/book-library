@@ -1,5 +1,5 @@
 import request from "supertest"
-import app from "../index"
+import app from "../src/app"
 import { BOOKS_API_ROUTE } from "./utils/constants"
 
 describe(`POST ${BOOKS_API_ROUTE}}`, () => {
