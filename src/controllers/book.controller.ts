@@ -1,6 +1,14 @@
 import { Request, Response } from "express"
+import { getBookList } from "../utils/helper"
 
-const bookDB: string[] = []
+// added for testing api
+const bookDB: string[] = [
+  "1984",
+  "A Christmas Carol",
+  "Moby Dick",
+  "The Hitchhiker’s Guide to the Galaxy",
+  "The Lord of the Rings"
+]
 
 const getIndexIfBookPresent = (book: string) =>
   bookDB.findIndex((item) => item === book)
@@ -25,17 +33,27 @@ export const createBook = (req: Request, res: Response) => {
   } catch (error) {
     res.json({
       status: "error",
-      message: error instanceof Error ? error.message : "Something went wrong"
+      message:
+        error instanceof Error
+          ? error.message
+          : "Internal Server Error! Something went wrong!"
     })
   }
 }
 
 export const getAllBooks = (req: Request, res: Response) => {
   try {
-    res.status(200).json({ data: bookDB })
+    getBookList(bookDB, 0, ",", (bookList: string) => {
+      res.status(200).json({ status: "success", data: { books: bookList } })
+    })
   } catch (error) {
-    //TODO: handle in global errors
-    console.error(error)
+    res.json({
+      status: "error",
+      message:
+        error instanceof Error
+          ? error.message
+          : "Internal Server Error! Something went wrong!"
+    })
   }
 }
 
@@ -60,7 +78,10 @@ export const deleteBook = (req: Request, res: Response) => {
   } catch (error) {
     res.json({
       status: "error",
-      message: error instanceof Error ? error.message : "Something went wrong"
+      message:
+        error instanceof Error
+          ? error.message
+          : "Internal Server Error! Something went wrong!"
     })
   }
 }
@@ -87,7 +108,10 @@ export const updateBook = (req: Request, res: Response) => {
   } catch (error) {
     res.json({
       status: "error",
-      message: error instanceof Error ? error.message : "Something went wrong"
+      message:
+        error instanceof Error
+          ? error.message
+          : "Internal Server Error! Something went wrong!"
     })
   }
 }
