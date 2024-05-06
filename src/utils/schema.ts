@@ -2,25 +2,29 @@ import { z } from "zod"
 
 export const createBookSchema = z.object({
   book: z
-    .string({ required_error: "Book title is required" })
-    .min(1, "Minimum 1 character is required for the Book title")
+    .string({ invalid_type_error: "Book title is required in string type" })
+    .min(1, "Book title is required")
     .trim()
 })
 
 export const deleteBookSchema = z.object({
   book: z
-    .string({ required_error: "Book title is required" })
-    .min(1, "Minimum 1 character is required for the Book title")
+    .string({ invalid_type_error: "Book title is required in string type" })
+    .min(1, "Book title is required")
     .trim()
 })
 
 export const updateBookSchema = z.object({
   original_book: z
-    .string({ required_error: "Original book title is required" })
-    .min(1, "Minimum 1 character is required for the Original book title")
+    .string({
+      invalid_type_error: "Original book title is required in string type"
+    })
+    .min(1, "Original book title is required")
     .trim(),
   new_book: z
-    .string({ required_error: "New book title is required" })
-    .min(1, "Minimum 1 character is required for the New book title")
+    .string({
+      invalid_type_error: "New book title is required in string type"
+    })
+    .min(1, "New book title is required")
     .trim()
 })

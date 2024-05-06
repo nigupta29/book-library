@@ -18,18 +18,19 @@ const getIndexIfBookPresent = (book: string) =>
  */
 export const createBook = (req: Request, res: Response, next: NextFunction) => {
   try {
-    const { book: newBook } = createBookSchema.parse(req.body)
+    const { book } = createBookSchema.parse(req.body)
+    const newBook = book.toLowerCase()
 
     if (getIndexIfBookPresent(newBook) !== -1) {
       res.status(400)
-      throw new Error(`Book: '${newBook}' is already present in the library`)
+      throw new Error(`Book: '${book}' is already present in the library`)
     }
 
     bookDB.push(newBook)
 
     res.status(201).json({
       status: "success",
-      message: `Book: '${newBook}' successfully added to the library`
+      message: `Book: '${book}' successfully added to the library`
     })
   } catch (error) {
     next(error)
