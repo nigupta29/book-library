@@ -64,10 +64,11 @@ export const getAllBooks = (
 export const deleteBook = (req: Request, res: Response, next: NextFunction) => {
   try {
     const { book } = deleteBookSchema.parse(req.body)
+    const deleteBookName = book.toLowerCase()
 
-    const bookIndex = getIndexIfBookPresent(book)
+    const bookIndex = getIndexIfBookPresent(deleteBookName)
 
-    if (getIndexIfBookPresent(book) === -1) {
+    if (bookIndex === -1) {
       res.status(404)
       throw new Error(`Book: '${book}' doesn't exist in the library`)
     }
