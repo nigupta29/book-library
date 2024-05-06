@@ -3,14 +3,15 @@ import { Request, Response } from "express"
 const bookDB: string[] = []
 
 const checkIfBookPresent = (book: string) =>
-  bookDB.some((item) => item === book)
+  bookDB.findIndex((item) => item === book)
 
 export const createBook = (req: Request, res: Response) => {
   try {
+    // TODO: string validation
     const newBook = req.body.book.trim()
 
-    if (checkIfBookPresent(newBook)) {
-      res.status(401)
+    if (checkIfBookPresent(newBook) !== -1) {
+      res.status(400)
       throw new Error(`Book: '${newBook}' is already present in the library`)
     }
 
@@ -35,5 +36,31 @@ export const getAllBooks = (req: Request, res: Response) => {
   } catch (error) {
     //TODO: handle in global errors
     console.error(error)
+  }
+}
+
+export const deleteBook = (req: Request, res: Response) => {
+  try {
+    // TODO: string validation
+    const book = req.body.book.trim()
+
+    const bookIndex = checkIfBookPresent(book)
+
+    if (checkIfBookPresent(book) === -1) {
+      res.status(404)
+      throw new Error(`Book: '${book}' doesn't exist in the library`)
+    }
+
+    bookDB.splice(bookIndex, 1)
+
+    res.status(204).json({
+      status: "success",
+      message: `Book: '${book}' successfully deleted from the library`
+    })
+  } catch (error) {
+    res.json({
+      status: "error",
+      message: error instanceof Error ? error.message : "Something went wrong"
+    })
   }
 }
