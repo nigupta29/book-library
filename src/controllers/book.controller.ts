@@ -9,7 +9,7 @@ import {
 const bookDB: string[] = []
 
 const getIndexIfBookPresent = (book: string) =>
-  bookDB.findIndex((item) => item === book)
+  bookDB.findIndex((item) => item.toLowerCase() === book.toLowerCase())
 
 /**
  * @desc    Create new books to the library
@@ -18,19 +18,18 @@ const getIndexIfBookPresent = (book: string) =>
  */
 export const createBook = (req: Request, res: Response, next: NextFunction) => {
   try {
-    const { book } = createBookSchema.parse(req.body)
-    const newBook = book.toLowerCase()
+    const { book: bookName } = createBookSchema.parse(req.body)
 
-    if (getIndexIfBookPresent(newBook) !== -1) {
+    if (getIndexIfBookPresent(bookName) !== -1) {
       res.status(400)
-      throw new Error(`Book: '${book}' is already present in the library`)
+      throw new Error(`Book: '${bookName}' is already present in the library`)
     }
 
-    bookDB.push(newBook)
+    bookDB.push(bookName)
 
     res.status(201).json({
       status: "success",
-      message: `Book: '${book}' successfully added to the library`
+      message: `Book: '${bookName}' successfully added to the library`
     })
   } catch (error) {
     next(error)
@@ -63,14 +62,13 @@ export const getAllBooks = (
  */
 export const deleteBook = (req: Request, res: Response, next: NextFunction) => {
   try {
-    const { book } = deleteBookSchema.parse(req.body)
-    const deleteBookName = book.toLowerCase()
+    const { book: bookName } = deleteBookSchema.parse(req.body)
 
-    const bookIndex = getIndexIfBookPresent(deleteBookName)
+    const bookIndex = getIndexIfBookPresent(bookName)
 
     if (bookIndex === -1) {
       res.status(404)
-      throw new Error(`Book: '${book}' doesn't exist in the library`)
+      throw new Error(`Book: '${bookName}' doesn't exist in the library`)
     }
 
     bookDB.splice(bookIndex, 1)
@@ -88,16 +86,15 @@ export const deleteBook = (req: Request, res: Response, next: NextFunction) => {
  */
 export const updateBook = (req: Request, res: Response, next: NextFunction) => {
   try {
-    const { original_book: originalBook, new_book: newBook } =
+    const { original_book: originalBookName, new_book: newBookName } =
       updateBookSchema.parse(req.body)
-
-    const originalBookName = originalBook.toLowerCase()
-    const newBookName = newBook.toLowerCase()
 
     const originalBookIndex = getIndexIfBookPresent(originalBookName)
     if (originalBookIndex === -1) {
       res.status(404)
-      throw new Error(`Book: '${originalBook}' doesn't exist in the library`)
+      throw new Error(
+        `Book: '${originalBookName}' doesn't exist in the library`
+      )
     }
 
     const newBookNameIndex = getIndexIfBookPresent(newBookName)
@@ -105,7 +102,7 @@ export const updateBook = (req: Request, res: Response, next: NextFunction) => {
     if (newBookNameIndex !== -1) {
       res.status(400)
       throw new Error(
-        `Can't update Book: '${originalBook}' to name: '${newBook}', as the '${newBook}' already exist in the library`
+        `Can't update Book: '${originalBookName}' to name: '${newBookName}', as the '${newBookName}' already exist in the library`
       )
     }
 
@@ -113,7 +110,7 @@ export const updateBook = (req: Request, res: Response, next: NextFunction) => {
 
     res.status(201).json({
       status: "success",
-      message: `Book: '${originalBook}' successfully updated to '${newBook}' in the library`
+      message: `Book: '${originalBookName}' successfully updated to '${newBookName}' in the library`
     })
   } catch (error) {
     next(error)
