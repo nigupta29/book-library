@@ -71,10 +71,7 @@ export const deleteBook = (req: Request, res: Response) => {
 
     bookDB.splice(bookIndex, 1)
 
-    res.status(204).json({
-      status: "success",
-      message: `Book: '${book}' successfully deleted from the library`
-    })
+    res.status(204).json({})
   } catch (error) {
     res.json({
       status: "error",
