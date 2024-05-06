@@ -11,6 +11,11 @@ const bookDB: string[] = []
 const getIndexIfBookPresent = (book: string) =>
   bookDB.findIndex((item) => item === book)
 
+/**
+ * @desc    Create new books to the library
+ * @route   POST /api/v1/books
+ * @access  Public
+ */
 export const createBook = (req: Request, res: Response, next: NextFunction) => {
   try {
     const { book: newBook } = createBookSchema.parse(req.body)
@@ -31,6 +36,11 @@ export const createBook = (req: Request, res: Response, next: NextFunction) => {
   }
 }
 
+/**
+ * @desc    Get all the books present in the library
+ * @route   GET /api/v1/books
+ * @access  Public
+ */
 export const getAllBooks = (
   req: Request,
   res: Response,
@@ -45,6 +55,11 @@ export const getAllBooks = (
   }
 }
 
+/**
+ * @desc    Delete any existing book present in the library
+ * @route   DELETE /api/v1/books
+ * @access  Public
+ */
 export const deleteBook = (req: Request, res: Response, next: NextFunction) => {
   try {
     const { book } = deleteBookSchema.parse(req.body)
@@ -64,6 +79,11 @@ export const deleteBook = (req: Request, res: Response, next: NextFunction) => {
   }
 }
 
+/**
+ * @desc    Update the name of any existing book from the library
+ * @route   PATCH /api/v1/books
+ * @access  Public
+ */
 export const updateBook = (req: Request, res: Response, next: NextFunction) => {
   try {
     const { original_book: originalBook, new_book: newBook } =
@@ -87,6 +107,11 @@ export const updateBook = (req: Request, res: Response, next: NextFunction) => {
   }
 }
 
+/**
+ * @desc    Mocking the process of saving the library data to the database.
+ * @route   PUT /api/v1/books
+ * @access  Public
+ */
 export const saveBooks = (req: Request, res: Response, next: NextFunction) => {
   try {
     const books = bookDB.map((item) => ({
