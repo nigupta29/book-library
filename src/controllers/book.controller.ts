@@ -91,14 +91,25 @@ export const updateBook = (req: Request, res: Response, next: NextFunction) => {
     const { original_book: originalBook, new_book: newBook } =
       updateBookSchema.parse(req.body)
 
-    const bookIndex = getIndexIfBookPresent(originalBook)
+    const originalBookName = originalBook.toLowerCase()
+    const newBookName = newBook.toLowerCase()
 
-    if (getIndexIfBookPresent(originalBook) === -1) {
+    const originalBookIndex = getIndexIfBookPresent(originalBookName)
+    if (originalBookIndex === -1) {
       res.status(404)
       throw new Error(`Book: '${originalBook}' doesn't exist in the library`)
     }
 
-    bookDB[bookIndex] = newBook
+    const newBookNameIndex = getIndexIfBookPresent(newBookName)
+
+    if (newBookNameIndex !== -1) {
+      res.status(400)
+      throw new Error(
+        `Can't update Book: '${originalBook}' to name: '${newBook}', as the '${newBook}' already exist in the library`
+      )
+    }
+
+    bookDB[originalBookIndex] = newBookName
 
     res.status(201).json({
       status: "success",
