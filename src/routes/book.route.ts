@@ -3,6 +3,7 @@ import {
   createBook,
   deleteBook,
   getAllBooks,
+  saveBooks,
   updateBook
 } from "../controllers/book.controller"
 
@@ -14,5 +15,6 @@ route
   .post(createBook)
   .patch(updateBook)
   .delete(deleteBook)
+  .put(saveBooks)
 
 export default route

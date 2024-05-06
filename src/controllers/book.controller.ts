@@ -115,3 +115,24 @@ export const updateBook = (req: Request, res: Response) => {
     })
   }
 }
+
+export const saveBooks = (req: Request, res: Response) => {
+  try {
+    const books = bookDB.map((item) => ({
+      [item]: Math.random() * item.length
+    }))
+
+    res.status(200).json({
+      status: "success",
+      data: { books }
+    })
+  } catch (error) {
+    res.json({
+      status: "error",
+      message:
+        error instanceof Error
+          ? error.message
+          : "Internal Server Error! Something went wrong!"
+    })
+  }
+}
